@@ -8,6 +8,11 @@ export type Post = {
 	lastPost: Date;
 };
 
+export type PostInfo = {
+	title: string;
+	comments: string[];
+};
+
 export function parseHomepage(html: string): Post[] {
 	const dom = new JSDOM(html);
 
@@ -29,14 +34,14 @@ export function parseHomepage(html: string): Post[] {
 		const author = node.children[1]?.textContent?.trim() ?? '';
 		const replies = Number(node.children[2]?.textContent ?? '0');
 		// const lastPost = new Date(node.children[3]?.textContent?.trim());
-        const lastPost = new Date()
+		const lastPost = new Date();
 
 		const post: Post = {
 			title,
 			href,
 			author,
 			replies,
-            lastPost,
+			lastPost
 		};
 
 		console.log(post);
@@ -44,4 +49,24 @@ export function parseHomepage(html: string): Post[] {
 	}
 
 	return posts;
+}
+
+export function parsePostPage(html: string): PostInfo {
+	const dom = new JSDOM(html);
+
+	const postParents = Array.from(dom.window.document.querySelectorAll('.PhorumListTable tr'));
+	const headerParent = postParents[0];
+	const title = headerParent.textContent?.trim() ?? '';
+
+	const commentParents = Array.from(dom.window.document.querySelectorAll('.PhorumMessage'));
+
+	const comments = commentParents.flatMap((comment) => {
+		const text = comment.textContent?.trim();
+		return text ? [text] : [];
+	});
+
+	return {
+		title,
+		comments
+	};
 }
