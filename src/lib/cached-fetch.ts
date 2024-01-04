@@ -1,6 +1,7 @@
 import { promises as fsPromises } from 'fs';
 import * as path from 'path';
 import { createHash } from 'crypto';
+import { dev } from '$app/environment';
 
 const cacheDir = './.cache';
 const cacheDuration = 300000; // Cache duration in milliseconds (5 minutes)
@@ -16,25 +17,32 @@ async function isCacheValid(cacheFilePath: string): Promise<boolean> {
 }
 
 export async function cachedFetchPageContent(url: string): Promise<string> {
-	const cacheKey = createHash('md5').update(url).digest('hex');
-	const cacheFilePath = path.join(cacheDir, cacheKey);
+	if (dev) {
+		const cacheKey = createHash('md5').update(url).digest('hex');
+		const cacheFilePath = path.join(cacheDir, cacheKey);
 
-	try {
-		await fsPromises.mkdir(cacheDir, { recursive: true });
+		try {
+			await fsPromises.mkdir(cacheDir, { recursive: true });
 
-		if (await isCacheValid(cacheFilePath)) {
-			const cachedText = await fsPromises.readFile(cacheFilePath, 'utf8');
-            console.log('Returned from cache')
-			return cachedText;
+			if (await isCacheValid(cacheFilePath)) {
+				const cachedText = await fsPromises.readFile(cacheFilePath, 'utf8');
+				console.log('Returned from cache');
+				return cachedText;
+			}
+		} catch (error) {
+			// Cache miss or error, continue to fetch data
 		}
-	} catch (error) {
-		// Cache miss or error, continue to fetch data
+
+		const response = await fetch(url);
+		const text = await response.text();
+
+		await fsPromises.writeFile(cacheFilePath, text);
+		console.log('Fetched from webpage');
+		return text;
+	} else {
+		const response = await fetch(url);
+		const text = await response.text();
+
+		return text;
 	}
-
-	const response = await fetch(url);
-	const text = await response.text();
-
-	await fsPromises.writeFile(cacheFilePath, text);
-    console.log('Fetched from webpage')
-	return text;
 }
