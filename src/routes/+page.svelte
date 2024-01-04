@@ -3,7 +3,10 @@
 </script>
 
 {#each data.posts as post}
-	<a class="card hover:bg-base-200 transition-colors sm:max-w-none" href="post">
+	<a
+		class="card hover:bg-base-200 transition-colors sm:max-w-none"
+		href="/read?{post.searchParams}"
+	>
 		<div class="card-body">
 			<div class="flex justify-between">
 				<div>

@@ -2,7 +2,7 @@ import { JSDOM } from 'jsdom';
 
 export type Post = {
 	title: string;
-	href: string;
+	searchParams: string;
 	author: string;
 	replies: number;
 	lastPost: Date;
@@ -34,17 +34,15 @@ export function parseHomepage(html: string): Post[] {
 			continue;
 		}
 
-		const title = anchor.innerHTML;
-		const href = anchor.href;
-
+		const searchParams = anchor.href.split('?')[1];
 		const author = node.children[1]?.textContent?.trim() ?? '';
 		const replies = Number(node.children[2]?.textContent ?? '0');
 		// const lastPost = new Date(node.children[3]?.textContent?.trim());
 		const lastPost = new Date();
 
 		const post: Post = {
-			title,
-			href,
+			title: anchor.innerHTML,
+			searchParams,
 			author,
 			replies,
 			lastPost
