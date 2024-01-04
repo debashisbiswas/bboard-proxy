@@ -8,7 +8,10 @@
 </div>
 
 {#each data.comments as comment}
-	<div class="border rounded whitespace-pre-line p-4 mb-4 mx-2">
-		{comment}
+	<div>
+		<span class="font-bold">{comment.author}</span> on {comment.date}
+	</div>
+	<div class="whitespace-pre-line p-4 mb-4 mx-2">
+		{comment.content}
 	</div>
 {/each}

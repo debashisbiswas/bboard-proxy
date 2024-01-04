@@ -8,9 +8,15 @@ export type Post = {
 	lastPost: Date;
 };
 
+export type Comment = {
+	author: string;
+	date: Date;
+	content: string;
+};
+
 export type PostInfo = {
 	title: string;
-	comments: string[];
+	comments: Comment[];
 };
 
 export function parseHomepage(html: string): Post[] {
@@ -61,8 +67,23 @@ export function parsePostPage(html: string): PostInfo {
 	const commentParents = Array.from(dom.window.document.querySelectorAll('.PhorumMessage'));
 
 	const comments = commentParents.flatMap((comment) => {
-		const text = comment.textContent?.trim();
-		return text ? [text] : [];
+		const content = comment.textContent?.trim();
+
+		if (!content) {
+			return [];
+		}
+
+		const lines = content.split('\n');
+
+		const author = lines[0].replace('Author:', '').trim();
+		// TODO: timezone?
+		const date = new Date(lines[1].replace('Date:', '').trim());
+
+		return {
+			author,
+			date,
+			content: lines.slice(2).join('\n')
+		};
 	});
 
 	return {
