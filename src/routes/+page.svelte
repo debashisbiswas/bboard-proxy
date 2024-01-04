@@ -4,6 +4,10 @@
 	export let data;
 </script>
 
+<svelte:head>
+	<title>Home | Clarinet Pages</title>
+</svelte:head>
+
 {#each data.posts as post}
 	<a
 		class="card hover:bg-base-200 transition-colors sm:max-w-none"

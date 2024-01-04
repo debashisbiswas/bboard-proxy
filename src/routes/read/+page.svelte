@@ -3,6 +3,10 @@
 	export let data;
 </script>
 
+<svelte:head>
+	<title>{data.title} | Clarinet Pages</title>
+</svelte:head>
+
 <div class="flex items-center justify-between px-2 mb-4">
 	<h2 class="font-bold text-xl md:text-3xl">{data.title}</h2>
 	<a href="/" class="btn btn-neutral">Back</a>
