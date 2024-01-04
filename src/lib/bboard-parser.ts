@@ -50,7 +50,6 @@ export function parseHomepage(html: string): Post[] {
 			lastPost
 		};
 
-		console.log(post);
 		posts.push(post);
 	}
 
