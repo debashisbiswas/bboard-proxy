@@ -1,16 +1,7 @@
 <script lang="ts">
-	export let data;
+	import { formatDate } from '$lib/format-date.js';
 
-	function formatDate(date: Date) {
-		return date.toLocaleDateString('en-US', {
-			weekday: 'short',
-			day: '2-digit',
-			month: 'short',
-			hour: '2-digit',
-			minute: '2-digit',
-			hour12: false
-		});
-	}
+	export let data;
 </script>
 
 {#each data.posts as post}
@@ -22,13 +13,16 @@
 			<div class="flex justify-between">
 				<div>
 					<h2 class="card-title mb-2">{post.title}</h2>
-					<p class="opacity-60">
-						<span class="text-accent font-semibold">
+
+					<div>
+						<span class="text-primary font-semibold">
 							{post.author}
 						</span>
-						· {formatDate(post.lastPost)}
-						· {post.replies} replies
-					</p>
+						<span class="text-base-content/60">
+							· {formatDate(post.lastPost)}
+							· {post.replies} replies
+						</span>
+					</div>
 				</div>
 			</div>
 		</div>
