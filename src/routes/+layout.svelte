@@ -2,8 +2,8 @@
 	import '../app.pcss';
 </script>
 
-<main class="max-w-screen-md mx-auto">
-	<h1 class="px-4 py-4 tracking-tight font-bold text-lg md:text-2xl">Clarinet Pages Reader</h1>
-
+<main
+	class="mx-auto min-h-screen max-w-screen-lg px-6 py-12 md:px-12 md:py-20 lg:px-24"
+>
 	<slot />
 </main>
