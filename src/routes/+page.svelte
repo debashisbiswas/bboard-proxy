@@ -8,13 +8,16 @@
 	<title>Home | Clarinet Pages</title>
 </svelte:head>
 
-<h1 class="tracking-tight text-slate-200 font-bold text-3xl sm:text-4xl md:text-5xl mb-12">
+<h1 class="tracking-tight text-slate-200 font-bold text-3xl sm:text-4xl md:text-5xl mb-8 md:mb-12">
 	Clarinet Pages Reader
 </h1>
 
 <div class="space-y-2">
 	{#each data.posts as post}
-		<a href="/read?{post.searchParams}" class="block group hover:bg-slate-800 p-4 rounded-lg hover:scale-[101%] transition">
+		<a
+			href="/read?{post.searchParams}"
+			class="block group hover:bg-slate-800 py-4 px-2 md:px-4 rounded-lg hover:scale-[101%] transition"
+		>
 			<h2
 				class="font-semibold text-slate-200 group-hover:text-teal-300 focus-visible:text-teal-300 mb-1 transition-colors text-lg"
 			>
