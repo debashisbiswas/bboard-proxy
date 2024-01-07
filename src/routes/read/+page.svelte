@@ -26,7 +26,7 @@
 				</span>
 			</div>
 
-			<div class="whitespace-pre-line">
+			<div class="whitespace-pre-wrap text-pretty break-words">
 				{comment.content}
 			</div>
 		</div>
