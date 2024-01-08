@@ -22,9 +22,12 @@ export const load: PageServerLoad = async ({ url }) => {
 	// is shown
 	searchParams.append('a', aValue);
 
-	const html = await cachedFetchPageContent(
-		'http://test.woodwind.org/clarinet/BBoard/list.html?' + searchParams.toString()
-	);
+	const scrapeUrl = 'http://test.woodwind.org/clarinet/BBoard/list.html?' + searchParams.toString();
+	const html = await cachedFetchPageContent(scrapeUrl);
 	const homepageData = parseHomepage(html);
-	return homepageData;
+
+	return {
+		...homepageData,
+		scrapeUrl
+	};
 };

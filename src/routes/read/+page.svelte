@@ -1,4 +1,5 @@
 <script lang="ts">
+	import TextLink from '$lib/components/TextLink.svelte';
 	import { formatDate } from '$lib/format-date.js';
 	export let data;
 </script>
@@ -7,12 +8,31 @@
 	<title>{data.title} | Clarinet Pages</title>
 </svelte:head>
 
-<a href="/" class="transition-colors hover:text-teal-300 mb-2 font-semibold tracking-tight block"
-	>&lt; Home</a
->
-<h1 class="tracking-tight text-slate-200 font-bold text-3xl sm:text-4xl md:text-5xl mb-6">
-	{data.title}
-</h1>
+<div class="mb-8">
+    <TextLink href="/" class="mb-3">&lt; Home</TextLink>
+
+    <h1 class="tracking-tight text-slate-200 font-bold text-3xl sm:text-4xl md:text-5xl mb-2">
+        {data.title}
+    </h1>
+
+    <TextLink href={data.scrapeUrl}>
+        See original post
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			fill="none"
+			viewBox="0 0 24 24"
+			stroke-width="1.5"
+			stroke="currentColor"
+			class="w-4 h-4 inline"
+		>
+			<path
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				d="m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25"
+			/>
+		</svg>
+    </TextLink>
+</div>
 
 <div class="space-y-12">
 	{#each data.comments as comment}

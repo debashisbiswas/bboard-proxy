@@ -1,4 +1,5 @@
 <script lang="ts">
+	import TextLink from '$lib/components/TextLink.svelte';
 	import { formatDate } from '$lib/format-date.js';
 
 	export let data;
@@ -21,9 +22,29 @@
 	<title>Home | Clarinet Pages</title>
 </svelte:head>
 
-<h1 class="tracking-tight text-slate-200 font-bold text-3xl sm:text-4xl md:text-5xl mb-8 md:mb-12">
-	Clarinet Pages Reader
-</h1>
+<div class="mb-8 md:mb-12">
+	<h1 class="tracking-tight text-slate-200 font-bold text-3xl sm:text-4xl md:text-5xl mb-2">
+		Clarinet Pages Reader
+	</h1>
+
+	<TextLink href={data.scrapeUrl}>
+		Go to the original Clarinet Pages
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			fill="none"
+			viewBox="0 0 24 24"
+			stroke-width="1.5"
+			stroke="currentColor"
+			class="w-4 h-4 inline"
+		>
+			<path
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				d="m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25"
+			/>
+		</svg>
+	</TextLink>
+</div>
 
 <div class="space-y-2 mb-4">
 	{#each data.posts as post}
@@ -70,18 +91,12 @@
 
 <div class="flex">
 	{#if data.previousT != null}
-		<a
-			href={buildNavigationHref(data.previousT, data.previousA)}
-			class="transition-colors hover:text-teal-300 font-semibold tracking-tight block"
-			>&lt; Newer posts</a
-		>
+		<TextLink href={buildNavigationHref(data.previousT, data.previousA)}>&lt; Newer posts</TextLink>
 	{/if}
 
 	{#if data.nextT != null}
-		<a
-			href={buildNavigationHref(data.nextT, data.nextA)}
-			class="transition-colors hover:text-teal-300 font-semibold tracking-tight block ml-auto"
-			>Older posts &gt;</a
+		<TextLink href={buildNavigationHref(data.nextT, data.nextA)} class="ml-auto"
+			>Older posts &gt;</TextLink
 		>
 	{/if}
 </div>
