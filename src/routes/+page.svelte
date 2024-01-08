@@ -2,6 +2,19 @@
 	import { formatDate } from '$lib/format-date.js';
 
 	export let data;
+
+	function buildNavigationHref(t: string, a: string | null) {
+		let output = '/';
+
+		if (a != null) {
+			const searchParams = new URLSearchParams();
+			searchParams.set('t', t);
+			searchParams.set('a', a);
+			output = '?' + searchParams.toString();
+		}
+
+		return output;
+	}
 </script>
 
 <svelte:head>
@@ -12,7 +25,7 @@
 	Clarinet Pages Reader
 </h1>
 
-<div class="space-y-2">
+<div class="space-y-2 mb-4">
 	{#each data.posts as post}
 		<a
 			href="/read?{post.searchParams}"
@@ -34,4 +47,22 @@
 			</div>
 		</a>
 	{/each}
+</div>
+
+<div class="flex">
+	{#if data.previousT != null}
+		<a
+			href={buildNavigationHref(data.previousT, data.previousA)}
+			class="transition-colors hover:text-teal-300 font-semibold tracking-tight block"
+			>&lt; Newer posts</a
+		>
+	{/if}
+
+	{#if data.nextT != null}
+		<a
+			href={buildNavigationHref(data.nextT, data.nextA)}
+			class="transition-colors hover:text-teal-300 font-semibold tracking-tight block ml-auto"
+			>Older posts &gt;</a
+		>
+	{/if}
 </div>

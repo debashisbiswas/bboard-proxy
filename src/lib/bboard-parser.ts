@@ -8,6 +8,14 @@ export type Post = {
 	lastPost: Date;
 };
 
+export type HomepageData = {
+	posts: Post[];
+	previousT: string | null;
+	previousA: string | null;
+	nextT: string | null;
+	nextA: string | null;
+};
+
 export type Comment = {
 	author: string;
 	date: Date;
@@ -19,10 +27,38 @@ export type PostInfo = {
 	comments: Comment[];
 };
 
-export function parseHomepage(html: string): Post[] {
+export function parseHomepage(html: string): HomepageData {
 	const dom = new JSDOM(html);
 
 	const postParents = dom.window.document.querySelectorAll('.PhorumListTable tr');
+	const links = [...dom.window.document.querySelectorAll('a')];
+
+	const newerPostsLink = links.find((element) => element.textContent === 'Newer Posts');
+	const olderPostsLink = links.find((element) => element.textContent === 'Older Posts');
+
+	let previousT = null;
+	let previousA = null;
+	if (newerPostsLink) {
+		const searchParams = new URLSearchParams(newerPostsLink.href.split('?')[1]);
+		previousT = searchParams.get('t');
+
+		const a = searchParams.get('a');
+		if (a) {
+			previousA = a;
+		}
+	}
+
+	let nextT = null;
+	let nextA = null;
+	if (olderPostsLink) {
+		const searchParams = new URLSearchParams(olderPostsLink.href.split('?')[1]);
+		nextT = searchParams.get('t');
+
+		const a = searchParams.get('a');
+		if (a) {
+			nextA = a;
+		}
+	}
 
 	const posts: Post[] = [];
 	for (const node of postParents) {
@@ -51,7 +87,13 @@ export function parseHomepage(html: string): Post[] {
 		posts.push(post);
 	}
 
-	return posts;
+	return {
+		posts,
+		previousT,
+		previousA,
+		nextT,
+		nextA
+	};
 }
 
 export function parsePostPage(html: string): PostInfo {

@@ -6,6 +6,5 @@ export const load: PageServerLoad = async ({ url }) => {
 	const postUrl = 'http://test.woodwind.org/clarinet/BBoard/read.html?' + url.searchParams;
 	const text = await cachedFetchPageContent(postUrl);
 	const postInfo = parsePostPage(text);
-
-	return { ...postInfo };
+	return postInfo;
 };
