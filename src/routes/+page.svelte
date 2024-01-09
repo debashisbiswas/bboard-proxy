@@ -23,7 +23,7 @@
 </svelte:head>
 
 <div class="mb-8 md:mb-12">
-	<h1 class="tracking-tight text-slate-200 font-bold text-3xl sm:text-4xl md:text-5xl mb-2">
+	<h1 class="mb-2 text-3xl font-bold tracking-tight text-slate-200 sm:text-4xl md:text-5xl">
 		Clarinet Pages Reader
 	</h1>
 
@@ -35,7 +35,7 @@
 			viewBox="0 0 24 24"
 			stroke-width="1.5"
 			stroke="currentColor"
-			class="w-4 h-4 inline"
+			class="inline h-4 w-4"
 		>
 			<path
 				stroke-linecap="round"
@@ -46,26 +46,26 @@
 	</TextLink>
 </div>
 
-<div class="space-y-2 mb-4">
+<div class="mb-4 space-y-2">
 	{#each data.posts as post}
 		<a
 			href="/read?{post.searchParams}"
-			class="block group active:bg-slate-800 hover:bg-slate-800 py-4 px-2 md:px-4 rounded-lg active:scale-[101%] hover:scale-[101%] transition"
+			class="group block rounded-lg px-2 py-4 transition hover:scale-[101%] hover:bg-slate-800 active:scale-[101%] active:bg-slate-800 md:px-4"
 		>
 			<h2
-				class="font-semibold text-slate-200 group-hover:text-teal-300 group-active:text-teal-300 mb-1 transition-colors text-lg"
+				class="mb-1 text-lg font-semibold text-slate-200 transition-colors group-hover:text-teal-300 group-active:text-teal-300"
 			>
 				{post.title}
 			</h2>
 
 			<div class="font-medium">
 				<div
-					class="inline-flex items-center mr-1 rounded-full bg-teal-400/10 px-3 py-1 text-teal-400 text-sm"
+					class="mr-1 inline-flex items-center rounded-full bg-teal-400/10 px-3 py-1 text-sm text-teal-400"
 				>
 					{post.author}
 				</div>
 
-				<span class="text-slate-500 tracking-tight inline-block">
+				<span class="inline-block tracking-tight text-slate-500">
 					<span class="mr-1">{formatDate(post.lastPost)}</span>
 
 					<svg
@@ -74,7 +74,7 @@
 						viewBox="0 0 24 24"
 						stroke-width="1.5"
 						stroke="currentColor"
-						class="w-4 h-4 inline"
+						class="inline h-4 w-4"
 					>
 						<path
 							stroke-linecap="round"

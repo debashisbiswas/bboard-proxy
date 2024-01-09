@@ -8,7 +8,7 @@ export const load: PageServerLoad = async ({ url }) => {
 	const postInfo = parsePostPage(text);
 
 	return {
-        ...postInfo,
-        scrapeUrl
-    };
+		...postInfo,
+		scrapeUrl
+	};
 };

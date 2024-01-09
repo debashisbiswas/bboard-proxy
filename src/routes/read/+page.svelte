@@ -9,21 +9,21 @@
 </svelte:head>
 
 <div class="mb-8">
-    <TextLink href="/" class="mb-3">&lt; Home</TextLink>
+	<TextLink href="/" class="mb-3">&lt; Home</TextLink>
 
-    <h1 class="tracking-tight text-slate-200 font-bold text-3xl sm:text-4xl md:text-5xl mb-2">
-        {data.title}
-    </h1>
+	<h1 class="mb-2 text-3xl font-bold tracking-tight text-slate-200 sm:text-4xl md:text-5xl">
+		{data.title}
+	</h1>
 
-    <TextLink href={data.scrapeUrl}>
-        See original post
+	<TextLink href={data.scrapeUrl}>
+		See original post
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
 			fill="none"
 			viewBox="0 0 24 24"
 			stroke-width="1.5"
 			stroke="currentColor"
-			class="w-4 h-4 inline"
+			class="inline h-4 w-4"
 		>
 			<path
 				stroke-linecap="round"
@@ -31,17 +31,17 @@
 				d="m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25"
 			/>
 		</svg>
-    </TextLink>
+	</TextLink>
 </div>
 
 <div class="space-y-12">
 	{#each data.comments as comment}
 		<div>
-			<div class="flex items-center space-x-2 font-medium mb-2">
+			<div class="mb-2 flex items-center space-x-2 font-medium">
 				<div class="flex items-center rounded-full bg-teal-400/10 px-3 py-1 text-teal-400">
 					{comment.author}
 				</div>
-				<span class="text-slate-500 tracking-tight">
+				<span class="tracking-tight text-slate-500">
 					{formatDate(comment.date)}
 				</span>
 			</div>

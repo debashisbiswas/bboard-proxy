@@ -4,8 +4,8 @@ export default {
 	theme: {
 		extend: {}
 	},
-    // https://github.com/tailwindlabs/tailwindcss/pull/8394
-    future: {
-        hoverOnlyWhenSupported: true
-    }
+	// https://github.com/tailwindlabs/tailwindcss/pull/8394
+	future: {
+		hoverOnlyWhenSupported: true
+	}
 };
