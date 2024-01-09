@@ -2,9 +2,9 @@ import { parseHomepage } from '$lib/bboard-parser';
 import { cachedFetchPageContent } from '$lib/cached-fetch';
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ url }) => {
-	const tValue = url.searchParams.get('t') ?? '';
-	const aValue = url.searchParams.get('a') ?? '';
+export const load: PageServerLoad = async ({ url, setHeaders }) => {
+	const tValue = url.searchParams.get('t');
+	const aValue = url.searchParams.get('a');
 
 	const searchParams = new URLSearchParams();
 
@@ -15,16 +15,22 @@ export const load: PageServerLoad = async ({ url }) => {
 	// TODO: if this is close to the current time, redirect and remove the
 	// param? This would help with the "navigating back to home" case correctly
 	// having no searchParams.
-	searchParams.append('t', tValue);
+	if (tValue != null) {
+		searchParams.append('t', tValue);
+	}
 
 	// a: direction of navigation. 1 for back/newer, 2 for forward/older. Seems
 	// like as long as the a parameter has some value, the "newer posts" button
 	// is shown
-	searchParams.append('a', aValue);
+	if (aValue != null) {
+		searchParams.append('a', aValue);
+	}
 
 	const scrapeUrl = 'http://test.woodwind.org/clarinet/BBoard/list.html?' + searchParams.toString();
 	const html = await cachedFetchPageContent(scrapeUrl);
 	const homepageData = parseHomepage(html);
+
+	setHeaders({ 'cache-control': 'max-age=120' });
 
 	return {
 		...homepageData,
