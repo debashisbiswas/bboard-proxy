@@ -1,10 +1,24 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { afterNavigate, beforeNavigate } from '$app/navigation';
+	import { afterNavigate, beforeNavigate, onNavigate } from '$app/navigation';
 	import '../app.pcss';
 
 	onMount(() => {
 		window.topbar.config({ barColors: { 0: '#2dd4bf' }, shadowColor: 'rgba(0, 0, 0, .3)' });
+	});
+
+	onNavigate(() => {
+		// @ts-expect-error view transitions
+		if (!document.startViewTransition) return;
+
+		return new Promise((resolve) => {
+			// @ts-expect-error view transitions
+			document.startViewTransition(async () => {
+				resolve();
+				// @ts-expect-error view transitions
+				await navigation.complete;
+			});
+		});
 	});
 
 	beforeNavigate(() => {
