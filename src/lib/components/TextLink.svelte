@@ -6,7 +6,7 @@
 
 <a
     {href}
-    class="transition-colors hover:text-teal-300 font-semibold tracking-tight block {clazz}"
+    class="transition-colors active:text-teal-300 hover:text-teal-300 font-semibold tracking-tight block {clazz}"
     >
     <slot />
 </a>

@@ -50,10 +50,10 @@
 	{#each data.posts as post}
 		<a
 			href="/read?{post.searchParams}"
-			class="block group hover:bg-slate-800 py-4 px-2 md:px-4 rounded-lg hover:scale-[101%] transition"
+			class="block group active:bg-slate-800 hover:bg-slate-800 py-4 px-2 md:px-4 rounded-lg active:scale-[101%] hover:scale-[101%] transition"
 		>
 			<h2
-				class="font-semibold text-slate-200 group-hover:text-teal-300 focus-visible:text-teal-300 mb-1 transition-colors text-lg"
+				class="font-semibold text-slate-200 group-hover:text-teal-300 group-active:text-teal-300 mb-1 transition-colors text-lg"
 			>
 				{post.title}
 			</h2>
