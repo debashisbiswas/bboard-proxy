@@ -19,16 +19,16 @@
 </script>
 
 <svelte:head>
-	<title>Home | Clarinet Pages</title>
+	<title>Home | Clarinet BBoard</title>
 </svelte:head>
 
 <div class="mb-8 md:mb-12">
 	<h1 class="mb-2 text-3xl font-bold tracking-tight text-slate-200 sm:text-4xl md:text-5xl">
-		Clarinet Pages Reader
+		The Clarinet BBoard
 	</h1>
 
 	<TextLink href={data.scrapeUrl}>
-		Go to the original Clarinet Pages
+		Go to the original Clarinet BBoard
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
 			fill="none"

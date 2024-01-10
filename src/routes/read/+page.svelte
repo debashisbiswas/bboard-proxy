@@ -5,7 +5,7 @@
 </script>
 
 <svelte:head>
-	<title>{data.title} | Clarinet Pages</title>
+	<title>{data.title} | Clarinet BBoard</title>
 </svelte:head>
 
 <div class="mb-8">

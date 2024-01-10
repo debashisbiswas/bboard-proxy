@@ -1,7 +1,7 @@
-# Clarinet Pages Reader
+# Clarinet BBoard Reader
 
 A webpage for viewing data from [https://test.woodwind.org/clarinet/BBoard/](The
-Clarinet Pages). The primary goal of this project is offer a more comfortable
+Clarinet BBoard). The primary goal of this project is offer a more comfortable
 reading experience on mobile devices.
 
 ## Developing
