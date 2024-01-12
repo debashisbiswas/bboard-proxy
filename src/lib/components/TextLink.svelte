@@ -6,7 +6,7 @@
 
 <a
 	{href}
-	class="block font-semibold tracking-tight transition-colors hover:text-teal-300 active:text-teal-300 {clazz}"
+	class="inline-block font-semibold tracking-tight transition-colors hover:text-teal-300 active:text-teal-300 {clazz}"
 >
 	<slot />
 </a>
