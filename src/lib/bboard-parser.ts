@@ -74,21 +74,19 @@ export function parseHomepage(html: string): HomepageData {
 		}
 
 		const searchParams = anchor.href.split('?')[1];
-		const author = node.children[1]?.textContent?.trim() ?? '';
+		const author = node.children[1]?.textContent?.replace(/ ★2017/, '').trim() ?? '';
 		const replies = Number(node.children[2]?.textContent ?? '0');
 		const lastPost = DateTime.fromSQL(node.children[3]?.textContent?.trim() ?? '', {
 			zone: BBOARD_TIME_ZONE
 		}).toJSDate();
 
-		const post: Post = {
+		posts.push({
 			title: anchor.innerHTML,
 			searchParams,
 			author,
 			replies,
 			lastPost
-		};
-
-		posts.push(post);
+		});
 	}
 
 	return {
@@ -118,7 +116,8 @@ export function parsePostPage(html: string): PostInfo {
 
 		const lines = content.split('\n');
 
-		const author = lines[0].replace('Author:', '').trim();
+		const author = lines[0].replace('Author:', '').replace(/★2017/, '').trim();
+
 		const date = DateTime.fromSQL(lines[1].replace('Date:', '').trim(), {
 			zone: BBOARD_TIME_ZONE
 		}).toJSDate();
