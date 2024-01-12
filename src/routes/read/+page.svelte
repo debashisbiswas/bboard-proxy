@@ -1,7 +1,11 @@
 <script lang="ts">
 	import TextLink from '$lib/components/TextLink.svelte';
-	import { formatDate } from '$lib/format-date.js';
+	import { DateTime } from 'luxon';
 	export let data;
+
+	function formatDate(date: Date): string {
+		return DateTime.fromJSDate(date).toLocaleString(DateTime.DATETIME_SHORT);
+	}
 </script>
 
 <svelte:head>
