@@ -1,4 +1,5 @@
 import { JSDOM } from 'jsdom';
+import { DateTime } from 'luxon';
 
 export type Post = {
 	title: string;
@@ -26,6 +27,8 @@ export type PostInfo = {
 	title: string;
 	comments: Comment[];
 };
+
+const BBOARD_TIME_ZONE = 'UTC+4';
 
 export function parseHomepage(html: string): HomepageData {
 	const dom = new JSDOM(html);
@@ -73,8 +76,9 @@ export function parseHomepage(html: string): HomepageData {
 		const searchParams = anchor.href.split('?')[1];
 		const author = node.children[1]?.textContent?.trim() ?? '';
 		const replies = Number(node.children[2]?.textContent ?? '0');
-		// const lastPost = new Date(node.children[3]?.textContent?.trim());
-		const lastPost = new Date();
+		const lastPost = DateTime.fromSQL(node.children[3]?.textContent?.trim() ?? '', {
+			zone: BBOARD_TIME_ZONE
+		}).toJSDate();
 
 		const post: Post = {
 			title: anchor.innerHTML,
@@ -115,8 +119,9 @@ export function parsePostPage(html: string): PostInfo {
 		const lines = content.split('\n');
 
 		const author = lines[0].replace('Author:', '').trim();
-		// TODO: timezone?
-		const date = new Date(lines[1].replace('Date:', '').trim());
+		const date = DateTime.fromSQL(lines[1].replace('Date:', '').trim(), {
+			zone: BBOARD_TIME_ZONE
+		}).toJSDate();
 
 		return {
 			author,

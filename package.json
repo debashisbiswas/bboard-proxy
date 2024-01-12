@@ -17,6 +17,7 @@
 		"@sveltejs/kit": "^2.0.0",
 		"@sveltejs/vite-plugin-svelte": "^3.0.0",
 		"@types/eslint": "8.56.0",
+		"@types/luxon": "^3.4.0",
 		"@typescript-eslint/eslint-plugin": "^6.0.0",
 		"@typescript-eslint/parser": "^6.0.0",
 		"autoprefixer": "^10.4.16",
@@ -38,6 +39,7 @@
 	"type": "module",
 	"dependencies": {
 		"@types/jsdom": "^21.1.6",
-		"jsdom": "^23.0.1"
+		"jsdom": "^23.0.1",
+		"luxon": "^3.4.4"
 	}
 }
