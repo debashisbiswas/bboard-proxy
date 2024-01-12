@@ -70,7 +70,7 @@ export function parseHomepage(html: string): HomepageData {
 		const anchor = node.querySelector('a');
 
 		// Skip the header, the first in the list
-		if (!anchor) {
+		if (!anchor || !anchor.textContent) {
 			continue;
 		}
 
@@ -82,7 +82,7 @@ export function parseHomepage(html: string): HomepageData {
 		}).toJSDate();
 
 		posts.push({
-			title: anchor.innerHTML,
+			title: anchor.textContent,
 			searchParams,
 			author,
 			replies,
