@@ -53,14 +53,14 @@
 			class="group block rounded-2xl px-2 py-4 transition hover:scale-[101%] hover:bg-slate-800 active:scale-[101%] active:bg-slate-800 md:px-4"
 		>
 			<h2
-				class="mb-1 text-lg font-semibold text-slate-200 transition-colors group-hover:text-teal-300 group-active:text-teal-300"
+				class="mb-1 text-lg font-semibold text-slate-200 transition-colors group-hover:text-teal-300 group-active:text-teal-300 md:mb-2 md:text-xl"
 			>
 				{post.title}
 			</h2>
 
 			<div class="font-medium">
 				<div
-					class="mr-1 inline-flex items-center rounded-full bg-teal-400/10 px-3 py-1 text-sm text-teal-400"
+					class="mr-1 inline-flex items-center rounded-full bg-teal-400/10 px-3 py-1 text-sm text-teal-400 md:text-base"
 				>
 					{post.author}
 				</div>

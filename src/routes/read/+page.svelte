@@ -37,7 +37,7 @@
 <div class="space-y-12">
 	{#each data.comments as comment}
 		<div>
-			<div class="mb-2 flex items-center space-x-2 font-medium">
+			<div class="mb-3 flex items-center space-x-2 font-medium">
 				<div class="flex items-center rounded-full bg-teal-400/10 px-3 py-1 text-teal-400">
 					{comment.author}
 				</div>
@@ -46,7 +46,7 @@
 				</span>
 			</div>
 
-			<div class="whitespace-pre-wrap text-pretty break-words">
+			<div class="whitespace-pre-wrap text-pretty break-words px-1 sm:text-lg">
 				{comment.content}
 			</div>
 		</div>
