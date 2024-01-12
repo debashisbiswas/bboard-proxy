@@ -37,17 +37,36 @@
 <div class="space-y-12">
 	{#each data.comments as comment}
 		<div>
-			<div class="mb-3 flex items-center space-x-2 font-medium">
+			<div class="mb-2 flex items-center space-x-2 font-medium">
 				<div class="flex items-center rounded-full bg-teal-400/10 px-3 py-1 text-teal-400">
 					{comment.author}
 				</div>
+
 				<span class="tracking-tight text-slate-500">
 					{formatDate(comment.date)}
 				</span>
 			</div>
 
-			<div class="whitespace-pre-wrap text-pretty break-words px-1 sm:text-lg">
-				{comment.content}
+			<div class="px-1">
+				<div class="mb-3">
+					{#if comment.editDate}
+						<div class="italic tracking-tight text-slate-500">
+							Edited {formatDate(comment.editDate)}
+						</div>
+					{/if}
+				</div>
+
+				<div class="text-pretty break-words sm:text-lg">
+					{#each comment.content as line}
+						{#if line.length === 0}
+							<br />
+						{:else if line.startsWith('> ')}
+							<p class="italic text-slate-500">{line.replace('> ', '')}</p>
+						{:else}
+							<p>{line}</p>
+						{/if}
+					{/each}
+				</div>
 			</div>
 		</div>
 	{/each}

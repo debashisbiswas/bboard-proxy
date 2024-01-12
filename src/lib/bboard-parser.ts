@@ -20,7 +20,8 @@ export type HomepageData = {
 export type Comment = {
 	author: string;
 	date: Date;
-	content: string;
+	content: string[];
+	editDate: Date | null;
 };
 
 export type PostInfo = {
@@ -108,24 +109,34 @@ export function parsePostPage(html: string): PostInfo {
 	const commentParents = Array.from(dom.window.document.querySelectorAll('.PhorumMessage'));
 
 	const comments = commentParents.flatMap((comment) => {
-		const content = comment.textContent?.trim();
+		let content = comment.textContent?.trim();
 
 		if (!content) {
 			return [];
 		}
 
+		let editDate = null;
+
+		const editStringRegex = /\n*Post Edited \((.*)\)/;
+		const editStringMatch = content.match(editStringRegex);
+		if (editStringMatch) {
+			editDate = DateTime.fromSQL(editStringMatch[1], { zone: BBOARD_TIME_ZONE }).toJSDate();
+			content = content.replace(editStringRegex, '');
+		}
+
 		const lines = content.split('\n');
 
-		const author = lines[0].replace('Author:', '').replace(/★2017/, '').trim();
+		const author = lines.shift()?.replace('Author:', '').replace(/★2017/, '').trim() ?? '';
 
-		const date = DateTime.fromSQL(lines[1].replace('Date:', '').trim(), {
+		const date = DateTime.fromSQL(lines.shift()?.replace('Date:', '').trim() ?? '', {
 			zone: BBOARD_TIME_ZONE
 		}).toJSDate();
 
 		return {
 			author,
 			date,
-			content: lines.slice(2).join('\n')
+			content: lines,
+			editDate
 		};
 	});
 
