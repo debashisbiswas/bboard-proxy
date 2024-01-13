@@ -1,5 +1,6 @@
 import { parseHomepage } from '$lib/bboard-parser';
 import { cachedFetchPageContent } from '$lib/cached-fetch';
+import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ url, setHeaders }) => {
@@ -29,6 +30,10 @@ export const load: PageServerLoad = async ({ url, setHeaders }) => {
 	const scrapeUrl = 'http://test.woodwind.org/clarinet/BBoard/list.html?' + searchParams.toString();
 	const html = await cachedFetchPageContent(scrapeUrl);
 	const homepageData = parseHomepage(html);
+
+	if (homepageData.posts.length === 0) {
+		error(503, 'Could not get content from the original BBoard. Is the site down?');
+	}
 
 	setHeaders({ 'cache-control': 'max-age=120' });
 

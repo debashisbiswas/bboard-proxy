@@ -40,8 +40,6 @@
 			<Post {post} />
 		{/each}
 	</div>
-{:else}
-	<p class="sm:text-lg">Could not fetch posts from the BBoard. Is the original site down?</p>
 {/if}
 
 {#if data.posts.length > 0}

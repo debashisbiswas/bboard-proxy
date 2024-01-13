@@ -3,6 +3,13 @@
 	import TextLink from '$lib/components/TextLink.svelte';
 	import { DateTime } from 'luxon';
 	export let data;
+	const title = `${data.title} - Clarinet BBoard Reader`;
+	const ogDescription =
+		data.comments[0].content
+			.map((node) => (node.type === 'text' ? node.text : ''))
+			.join(' ')
+			.trim()
+			.slice(0, 60) + '…';
 
 	function formatDate(date: Date): string {
 		return DateTime.fromJSDate(date).toLocaleString(DateTime.DATETIME_SHORT);
@@ -14,9 +21,12 @@
 </script>
 
 <svelte:head>
-	<title>{data.title} - Clarinet BBoard Reader</title>
+	<title>{title}</title>
 	<meta property="og:site_name" content="Clarinet BBoard Reader" />
-    <meta property="og:title" content={data.title} />
+	<meta property="og:title" content={title} />
+	{#if data.comments[0]}
+		<meta property="og:description" content={ogDescription} />
+	{/if}
 </svelte:head>
 
 <div class="mb-8">
