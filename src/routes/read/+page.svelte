@@ -81,14 +81,14 @@
 
 				<div class="text-pretty break-words sm:text-lg">
 					{#each comment.content as node}
-						{#if node.type === 'break'}
-							<br />
+						{#if node.type === 'text'}
+							<span>{node.text}</span>
 						{:else if node.type === 'anchor'}
-							<TextLink href={node.href} target={node.target} class="underline">
+							<TextLink href={node.href} target={node.target} class="break-all underline">
 								{node.text}
 							</TextLink>
-						{:else if node.type === 'text'}
-							<span>{node.text}</span>
+						{:else if node.type === 'break'}
+							<br />
 						{:else if exhaustiveCheck(node)}
 							<span></span>
 						{/if}
