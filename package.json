@@ -40,6 +40,7 @@
 	"dependencies": {
 		"@types/jsdom": "^21.1.6",
 		"jsdom": "^23.0.1",
-		"luxon": "^3.4.4"
+		"luxon": "^3.4.4",
+		"node-html-parser": "^6.1.12"
 	}
 }

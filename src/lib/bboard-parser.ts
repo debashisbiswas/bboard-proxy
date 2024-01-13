@@ -1,5 +1,6 @@
 import { JSDOM } from 'jsdom';
 import { DateTime } from 'luxon';
+import { HTMLElement, NodeType, parse } from 'node-html-parser';
 
 export type Post = {
 	title: string;
@@ -17,11 +18,35 @@ export type HomepageData = {
 	nextA: string | null;
 };
 
+export type Attachment = {
+	name: string;
+	href: string;
+};
+
+export type CommentBreak = {
+	type: 'break';
+};
+
+export type CommentText = {
+	type: 'text';
+	text: string;
+};
+
+export type CommentAnchor = {
+	type: 'anchor';
+	text: string;
+	href: string;
+	target: string | undefined;
+};
+
+export type CommentContent = CommentBreak | CommentText | CommentAnchor;
+
 export type Comment = {
 	author: string;
-	date: Date;
-	content: string[];
+	date: Date | null;
+	content: CommentContent[];
 	editDate: Date | null;
+	attachments: Attachment[];
 };
 
 export type PostInfo = {
@@ -99,7 +124,63 @@ export function parseHomepage(html: string): HomepageData {
 	};
 }
 
-export function parsePostPage(html: string): PostInfo {
+export function parsePostPage(html: string, url: URL): PostInfo {
+	function extractAuthor(html: string, regex: RegExp) {
+		const match = html.match(regex);
+
+		let author = '';
+		if (match && match[1] != null) {
+			author = match[1];
+			// TODO
+			author = author.replace('2017', '');
+		}
+
+		return author;
+	}
+
+	function extractDate(html: string, regex: RegExp) {
+		const match = html.match(regex);
+
+		let date = null;
+		if (match && match[2] != null) {
+			const matchedDate = match[2];
+
+			date = DateTime.fromSQL(matchedDate, { zone: BBOARD_TIME_ZONE }).toJSDate();
+		}
+
+		return date;
+	}
+
+	function extractAttachments(html: string, regex: RegExp) {
+		const matches = html.matchAll(regex);
+
+		const attachments = [];
+
+		for (const match of matches) {
+			const href = match[1];
+			const name = match[2];
+
+			attachments.push({
+				name,
+				href
+			});
+		}
+
+		return attachments;
+	}
+
+	function extractEditDate(html: string, regex: RegExp) {
+		const match = html.match(regex);
+
+		let editDate = null;
+
+		if (match) {
+			editDate = DateTime.fromSQL(match[2], { zone: BBOARD_TIME_ZONE }).toJSDate();
+		}
+
+		return editDate;
+	}
+
 	const dom = new JSDOM(html);
 
 	const postParents = Array.from(dom.window.document.querySelectorAll('.PhorumListTable tr'));
@@ -109,34 +190,78 @@ export function parsePostPage(html: string): PostInfo {
 	const commentParents = Array.from(dom.window.document.querySelectorAll('.PhorumMessage'));
 
 	const comments = commentParents.flatMap((comment) => {
-		let content = comment.textContent?.trim();
+		let innerHTML = comment.innerHTML;
 
-		if (!content) {
-			return [];
+		// Extractions: get data, remove from content
+		// todo: should be one function, not two
+		const authorRegex = /Author:&nbsp;<a.*>(.*)<\/a>.*<br>/;
+		const author = extractAuthor(innerHTML, authorRegex);
+		innerHTML = innerHTML.replace(authorRegex, '');
+
+		const dateRegex = /Date:(&nbsp;)+(.*)<br>/;
+		const date = extractDate(innerHTML, dateRegex);
+		innerHTML = innerHTML.replace(dateRegex, '');
+
+		const attachmentRegex = /Attachment:&nbsp; <a href="(.*)">(.*)<\/a> (.*)<br>/g;
+		const attachments = extractAttachments(innerHTML, attachmentRegex);
+		innerHTML = innerHTML.replaceAll(attachmentRegex, '');
+
+		const editStringRegex = /(<br>)*Post Edited \((.*)\)/;
+		const editDate = extractEditDate(innerHTML, editStringRegex);
+		innerHTML = innerHTML.replace(editStringRegex, '');
+
+		// "Trim" breaks and newlines
+		innerHTML = innerHTML.replace(/^(<br>|\n)+|(<br>|\n)+$/g, '');
+
+		// Enrichments: augment content
+		innerHTML = innerHTML.replaceAll(
+			'http://test.woodwind.org/clarinet/BBoard/read.html',
+			`${url.protocol}//${url.host}/read`
+		);
+
+		const parsed = parse(innerHTML);
+
+		const content: CommentContent[] = [];
+		for (const node of parsed.childNodes) {
+			if (node.nodeType === NodeType.ELEMENT_NODE) {
+				const element = node as HTMLElement;
+
+				if (element.tagName === 'BR') {
+					content.push({
+						type: 'break'
+					});
+				} else if (element.tagName === 'A') {
+					content.push({
+						type: 'anchor',
+						text: element.textContent,
+						href: element.getAttribute('href') ?? '',
+						target: element.getAttribute('target')
+					});
+				} else if (element.tagName === 'IMG') {
+					content.push({
+						type: 'text',
+						text: element.getAttribute('alt') ?? ''
+					});
+				}
+			} else if (node.nodeType === NodeType.TEXT_NODE) {
+				// Don't trim this, empty spaces exist in original comments
+				const text = node.textContent;
+
+				if (text) {
+					content.push({
+						type: 'text',
+						text
+					});
+				}
+			}
 		}
-
-		let editDate = null;
-
-		const editStringRegex = /\n*Post Edited \((.*)\)/;
-		const editStringMatch = content.match(editStringRegex);
-		if (editStringMatch) {
-			editDate = DateTime.fromSQL(editStringMatch[1], { zone: BBOARD_TIME_ZONE }).toJSDate();
-			content = content.replace(editStringRegex, '');
-		}
-
-		const lines = content.split('\n');
-
-		const author = lines.shift()?.replace('Author:', '').replace(/★2017/, '').trim() ?? '';
-
-		const date = DateTime.fromSQL(lines.shift()?.replace('Date:', '').trim() ?? '', {
-			zone: BBOARD_TIME_ZONE
-		}).toJSDate();
 
 		return {
 			author,
 			date,
-			content: lines,
-			editDate
+			content,
+			editDate,
+			attachments
 		};
 	});
 

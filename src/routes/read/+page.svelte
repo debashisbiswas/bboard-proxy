@@ -1,10 +1,15 @@
 <script lang="ts">
+	import ArrowIcon from '$lib/components/ArrowIcon.svelte';
 	import TextLink from '$lib/components/TextLink.svelte';
 	import { DateTime } from 'luxon';
 	export let data;
 
 	function formatDate(date: Date): string {
 		return DateTime.fromJSDate(date).toLocaleString(DateTime.DATETIME_SHORT);
+	}
+
+	function exhaustiveCheck(x: never): never {
+		throw new Error("Didn't expect to get here " + x);
 	}
 </script>
 
@@ -21,20 +26,7 @@
 
 	<TextLink href={data.scrapeUrl}>
 		See original post
-		<svg
-			xmlns="http://www.w3.org/2000/svg"
-			fill="none"
-			viewBox="0 0 24 24"
-			stroke-width="1.5"
-			stroke="currentColor"
-			class="inline h-4 w-4"
-		>
-			<path
-				stroke-linecap="round"
-				stroke-linejoin="round"
-				d="m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25"
-			/>
-		</svg>
+		<ArrowIcon />
 	</TextLink>
 </div>
 
@@ -46,9 +38,11 @@
 					{comment.author}
 				</div>
 
-				<span class="tracking-tight text-slate-500">
-					{formatDate(comment.date)}
-				</span>
+				{#if comment.date}
+					<span class="tracking-tight text-slate-500">
+						{formatDate(comment.date)}
+					</span>
+				{/if}
 			</div>
 
 			<div class="px-1">
@@ -60,14 +54,31 @@
 					{/if}
 				</div>
 
+				{#if comment.attachments.length > 0}
+					<div class="align-items-end mb-3 flex flex-wrap gap-x-6 gap-y-2">
+						{#each comment.attachments as attachment}
+							<TextLink href={attachment.href} target="_blank">
+								<span class="underline">
+									{attachment.name}
+								</span>
+								<ArrowIcon /></TextLink
+							>
+						{/each}
+					</div>
+				{/if}
+
 				<div class="text-pretty break-words sm:text-lg">
-					{#each comment.content as line}
-						{#if line.length === 0}
+					{#each comment.content as node}
+						{#if node.type === 'break'}
 							<br />
-						{:else if line.startsWith('> ')}
-							<p class="italic text-slate-500">{line.replace('> ', '')}</p>
-						{:else}
-							<p>{line}</p>
+						{:else if node.type === 'anchor'}
+							<TextLink href={node.href} target={node.target} class="underline">
+								{node.text}
+							</TextLink>
+						{:else if node.type === 'text'}
+							<span>{node.text}</span>
+						{:else if exhaustiveCheck(node)}
+							<span></span>
 						{/if}
 					{/each}
 				</div>
