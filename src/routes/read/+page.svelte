@@ -14,7 +14,9 @@
 </script>
 
 <svelte:head>
-	<title>{data.title} | Clarinet BBoard</title>
+	<title>{data.title} - Clarinet BBoard Reader</title>
+	<meta property="og:site_name" content="Clarinet BBoard Reader" />
+    <meta property="og:title" content={data.title} />
 </svelte:head>
 
 <div class="mb-8">
