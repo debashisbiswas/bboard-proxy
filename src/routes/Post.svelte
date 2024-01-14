@@ -1,23 +1,8 @@
 <script lang="ts">
 	import type { Post } from '$lib/bboard-parser';
-	import { DateTime } from 'luxon';
-	import { onMount } from 'svelte';
+	import { formatDate } from '$lib/format-date';
 
 	export let post: Post;
-
-	let now = DateTime.now();
-
-	onMount(() => {
-		const interval = setInterval(() => {
-			now = DateTime.now();
-		}, 1000 - new Date().getMilliseconds());
-
-		return () => {
-			clearInterval(interval);
-		};
-	});
-
-	$: humanDate = DateTime.fromJSDate(post.lastPost).toRelative({ base: now });
 </script>
 
 <a
@@ -38,7 +23,7 @@
 		</div>
 
 		<span class="inline-block tracking-tight text-slate-500">
-			<span class="mr-1">{humanDate}</span>
+			<span class="mr-1">{formatDate(post.lastPost)}</span>
 
 			<svg
 				xmlns="http://www.w3.org/2000/svg"

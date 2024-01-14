@@ -1,15 +1,11 @@
 <script lang="ts">
 	import ArrowIcon from '$lib/components/ArrowIcon.svelte';
 	import TextLink from '$lib/components/TextLink.svelte';
+	import { formatDate } from '$lib/format-date';
 	import Content from './Content.svelte';
-	import { DateTime } from 'luxon';
 
 	export let data;
 	const title = `${data.title} - Clarinet BBoard Reader`;
-
-	function formatDate(date: Date): string {
-		return DateTime.fromJSDate(date).toLocaleString(DateTime.DATETIME_SHORT);
-	}
 </script>
 
 <svelte:head>
@@ -55,7 +51,7 @@
 				<div class="mb-3">
 					{#if comment.editDate}
 						<div class="tracking-tight text-slate-500">
-							Edited {formatDate(comment.editDate)}
+							Edited: {formatDate(comment.editDate)}
 						</div>
 					{/if}
 				</div>
