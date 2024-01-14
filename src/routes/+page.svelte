@@ -20,7 +20,7 @@
 </script>
 
 <svelte:head>
-	<title>Home | Clarinet BBoard</title>
+	<title>Home - Clarinet BBoard</title>
 </svelte:head>
 
 <div class="mb-8 md:mb-12">

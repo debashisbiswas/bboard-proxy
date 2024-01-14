@@ -1,6 +1,6 @@
 import { JSDOM } from 'jsdom';
 import { DateTime } from 'luxon';
-import { HTMLElement, NodeType, parse } from 'node-html-parser';
+import { parse } from 'node-html-parser';
 
 export type Post = {
 	title: string;
@@ -23,28 +23,10 @@ export type Attachment = {
 	href: string;
 };
 
-export type CommentBreak = {
-	type: 'break';
-};
-
-export type CommentText = {
-	type: 'text';
-	text: string;
-};
-
-export type CommentAnchor = {
-	type: 'anchor';
-	text: string;
-	href: string;
-	target: string | undefined;
-};
-
-export type CommentContent = CommentBreak | CommentText | CommentAnchor;
-
 export type Comment = {
 	author: string;
 	date: Date | null;
-	content: CommentContent[];
+	html: string;
 	editDate: Date | null;
 	attachments: Attachment[];
 };
@@ -52,6 +34,7 @@ export type Comment = {
 export type PostInfo = {
 	title: string;
 	comments: Comment[];
+	ogDescription: string;
 };
 
 const BBOARD_TIME_ZONE = 'UTC+4';
@@ -183,83 +166,53 @@ export function parsePostPage(html: string, url: URL): PostInfo {
 
 	const dom = new JSDOM(html);
 
-	const postParents = Array.from(dom.window.document.querySelectorAll('.PhorumListTable tr'));
-	const headerParent = postParents[0];
-	const title = headerParent.textContent?.trim() ?? '';
+	const headerParent = dom.window.document.querySelector('.PhorumTableHeader');
+
+	const title = headerParent?.textContent?.trim() ?? '';
 
 	const commentParents = Array.from(dom.window.document.querySelectorAll('.PhorumMessage'));
 
+	let ogDescription = '';
 	const comments = commentParents.flatMap((comment) => {
-		let innerHTML = comment.innerHTML;
+		let html = comment.innerHTML;
 
 		// Extractions: get data, remove from content
 		// todo: should be one function, not two
 		const authorRegex = /Author:&nbsp;<a.*>(.*)<\/a>.*<br>/;
-		const author = extractAuthor(innerHTML, authorRegex);
-		innerHTML = innerHTML.replace(authorRegex, '');
+		const author = extractAuthor(html, authorRegex);
+		html = html.replace(authorRegex, '');
 
 		const dateRegex = /Date:(&nbsp;)+(.*)<br>/;
-		const date = extractDate(innerHTML, dateRegex);
-		innerHTML = innerHTML.replace(dateRegex, '');
+		const date = extractDate(html, dateRegex);
+		html = html.replace(dateRegex, '');
 
 		const attachmentRegex = /Attachment:&nbsp; <a href="(.*)">(.*)<\/a> (.*)<br>/g;
-		const attachments = extractAttachments(innerHTML, attachmentRegex);
-		innerHTML = innerHTML.replaceAll(attachmentRegex, '');
+		const attachments = extractAttachments(html, attachmentRegex);
+		html = html.replaceAll(attachmentRegex, '');
 
 		const editStringRegex = /(<br>)*Post Edited \((.*)\)/;
-		const editDate = extractEditDate(innerHTML, editStringRegex);
-		innerHTML = innerHTML.replace(editStringRegex, '');
+		const editDate = extractEditDate(html, editStringRegex);
+		html = html.replace(editStringRegex, '');
 
 		// "Trim" breaks and newlines
-		innerHTML = innerHTML.replace(/^(<br>|\n)+|(<br>|\n)+$/g, '');
+		html = html.replace(/^(<br>|\n)+|(<br>|\n)+$/g, '');
 
 		// Enrichments: augment content
-		innerHTML = innerHTML.replaceAll(
+		html = html.replaceAll(
 			'http://test.woodwind.org/clarinet/BBoard/read.html',
 			`${url.protocol}//${url.host}/read`
 		);
 
-		const parsed = parse(innerHTML);
+		const parsed = parse(html);
 
-		const content: CommentContent[] = [];
-		for (const node of parsed.childNodes) {
-			if (node.nodeType === NodeType.ELEMENT_NODE) {
-				const element = node as HTMLElement;
-
-				if (element.tagName === 'BR') {
-					content.push({
-						type: 'break'
-					});
-				} else if (element.tagName === 'A') {
-					content.push({
-						type: 'anchor',
-						text: element.textContent,
-						href: element.getAttribute('href') ?? '',
-						target: element.getAttribute('target')
-					});
-				} else if (element.tagName === 'IMG') {
-					content.push({
-						type: 'text',
-						text: element.getAttribute('alt') ?? ''
-					});
-				}
-			} else if (node.nodeType === NodeType.TEXT_NODE) {
-				// Don't trim this, empty spaces exist in original comments
-				const text = node.textContent;
-
-				if (text) {
-					content.push({
-						type: 'text',
-						text
-					});
-				}
-			}
+		if (!ogDescription) {
+			ogDescription = parsed.textContent.replace(/\s+/g, ' ').trim().slice(0, 60) + '…';
 		}
 
 		return {
 			author,
 			date,
-			content,
+			html,
 			editDate,
 			attachments
 		};
@@ -267,6 +220,7 @@ export function parsePostPage(html: string, url: URL): PostInfo {
 
 	return {
 		title,
-		comments
+		comments,
+		ogDescription
 	};
 }

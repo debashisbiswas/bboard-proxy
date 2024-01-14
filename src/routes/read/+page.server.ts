@@ -8,8 +8,6 @@ export const load: PageServerLoad = async ({ url, setHeaders }) => {
 	const text = await cachedFetchPageContent(scrapeUrl);
 	const postInfo = parsePostPage(text, url);
 
-	console.log(postInfo);
-
 	if (postInfo.comments.length === 0) {
 		error(503, 'Could not get content from the original BBoard. Is the site down?');
 	}
