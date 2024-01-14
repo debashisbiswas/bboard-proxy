@@ -16,6 +16,7 @@
 		@apply transition-colors;
 		@apply hover:text-teal-300;
 		@apply active:text-teal-300;
+		@apply break-all;
 	}
 
 	:global(#injected img) {
