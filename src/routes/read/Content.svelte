@@ -3,7 +3,7 @@
 	export let comment: Comment;
 </script>
 
-<div id="injected">
+<div id="injected" class="text-pretty break-words">
 	{@html comment.html}
 </div>
 
