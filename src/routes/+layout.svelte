@@ -7,8 +7,10 @@
 		window.topbar.config({ barColors: { 0: '#2dd4bf' }, shadowColor: 'rgba(0, 0, 0, .3)' });
 	});
 
-	beforeNavigate(() => {
-		window.topbar.show(500);
+	beforeNavigate((navigation) => {
+		if (!navigation.willUnload) {
+			window.topbar.show(500);
+		}
 	});
 
 	afterNavigate(() => {
