@@ -20,7 +20,10 @@ export const load: PageServerLoad = async ({ url, setHeaders }) => {
 			setHeaders({ 'cache-control': `max-age=${ttl}` });
 		} else {
 			html = await cachedFetchPageContent(scrapeUrl);
-			await kv.set(scrapeUrl, html, { ex: 120 });
+
+			const expiration = 120;
+			await kv.set(scrapeUrl, html, { ex: expiration });
+			setHeaders({ 'cache-control': `max-age=${expiration}` });
 		}
 
 		return html;
