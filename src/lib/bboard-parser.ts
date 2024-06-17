@@ -226,8 +226,6 @@ export function parsePostPage(html: string, url: URL): PostInfo {
 }
 
 export function parseSearchPage(html: string, url: URL) {
-	console.log(url);
-
 	const enrichedHtml = html.replaceAll(
 		'http://test.woodwind.org/clarinet/BBoard/read.html',
 		`${url.origin}/read`
@@ -244,18 +242,18 @@ export function parseSearchPage(html: string, url: URL) {
 			continue;
 		}
 
-		const link = anchor.href.replace();
+		const link = anchor.href;
 
 		const authorNode = anchor.nextSibling?.nextSibling;
-		const author = authorNode?.textContent ?? '';
+		const author = authorNode?.textContent?.replace(/^From: /, '') ?? '';
 
 		const dateNode = authorNode?.nextSibling?.nextSibling;
-		const date = DateTime.fromSQL(dateNode?.textContent?.trim() ?? '', {
+		const date = DateTime.fromSQL(dateNode?.textContent?.trim().replace(/^Date: /, '') ?? '', {
 			zone: BBOARD_TIME_ZONE
 		}).toJSDate();
 
 		const subjectNode = dateNode?.nextSibling?.nextSibling;
-		const subject = subjectNode?.textContent ?? '';
+		const subject = subjectNode?.textContent?.replace(/^Subj: /, '') ?? '';
 
 		const previewNode = subjectNode?.nextSibling?.nextSibling;
 		const preview = previewNode?.textContent ?? '';

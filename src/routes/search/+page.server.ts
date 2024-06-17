@@ -38,11 +38,7 @@ export const load: PageServerLoad = async ({ url, setHeaders }) => {
 	const scrapeUrl =
 		'http://test.woodwind.org/Search/index.html?clarinetBBoard_index=clarinetBBoard_index&sort=swishrank+desc&words=' +
 		query;
-	console.log(scrapeUrl);
-
 	const html = await getHtml(scrapeUrl);
-	console.log(url);
-
 	const searchInfo = parseSearchPage(html, url);
 	return { searchInfo };
 };
