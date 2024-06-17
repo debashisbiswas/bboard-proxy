@@ -36,7 +36,12 @@
 <div class="mb-8">
 	<form method="get" action="/search">
 		<div class="flex w-full">
-			<input class="rounded-lg bg-slate-800 p-2" name="query" type="text" required />
+			<input
+				class="min-w-0 flex-shrink rounded-lg bg-slate-800 p-2"
+				name="query"
+				type="text"
+				required
+			/>
 			<button class="ml-4 rounded-lg bg-teal-400/10 px-4 py-2 font-bold text-teal-400"
 				>Search</button
 			>

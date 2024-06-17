@@ -22,7 +22,7 @@
 		<form method="get" action="/search">
 			<div class="flex w-full">
 				<input
-					class="rounded-lg bg-slate-800 p-2"
+					class="min-w-0 flex-shrink rounded-lg bg-slate-800 p-2"
 					name="query"
 					value={$page.url.searchParams.get('query')}
 					type="text"
