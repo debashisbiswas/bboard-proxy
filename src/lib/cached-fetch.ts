@@ -37,7 +37,7 @@ export async function cachedFetchPageContent(url: string): Promise<string> {
 		const text = await response.text();
 
 		await fsPromises.writeFile(cacheFilePath, text);
-		console.log('Fetched from webpage');
+		console.log(`Fetched from webpage: ${url}`);
 		return text;
 	} else {
 		const response = await fetch(url);

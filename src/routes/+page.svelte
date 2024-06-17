@@ -1,6 +1,7 @@
 <script lang="ts">
 	import ArrowIcon from '$lib/components/ArrowIcon.svelte';
 	import TextLink from '$lib/components/TextLink.svelte';
+	import PageHeader from './PageHeader.svelte';
 	import Post from './Post.svelte';
 
 	export let data;
@@ -23,15 +24,24 @@
 	<title>Home - Clarinet BBoard</title>
 </svelte:head>
 
-<div class="mb-8 md:mb-12">
-	<h1 class="mb-2 text-3xl font-bold tracking-tight text-slate-200 sm:text-4xl md:text-5xl">
-		The Clarinet BBoard
-	</h1>
+<div class="mb-8">
+	<PageHeader text="The Clarinet BBoard" />
 
 	<TextLink href={data.scrapeUrl}>
 		Go to the original Clarinet BBoard
 		<ArrowIcon />
 	</TextLink>
+</div>
+
+<div class="mb-8">
+	<form method="get" action="/search">
+		<div class="flex w-full">
+			<input class="rounded-lg bg-slate-800 p-2" name="query" type="text" />
+			<button class="ml-4 rounded-lg bg-teal-400/10 px-4 py-2 font-bold text-teal-400"
+				>Search</button
+			>
+		</div>
+	</form>
 </div>
 
 {#if data.posts.length > 0}

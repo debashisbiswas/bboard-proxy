@@ -200,7 +200,7 @@ export function parsePostPage(html: string, url: URL): PostInfo {
 		// Enrichments: augment content
 		html = html.replaceAll(
 			'http://test.woodwind.org/clarinet/BBoard/read.html',
-			`${url.protocol}//${url.host}/read`
+			`${url.origin}/read`
 		);
 
 		const parsed = parse(html);
@@ -223,4 +223,51 @@ export function parsePostPage(html: string, url: URL): PostInfo {
 		comments,
 		ogDescription
 	};
+}
+
+export function parseSearchPage(html: string, url: URL) {
+	console.log(url);
+
+	const enrichedHtml = html.replaceAll(
+		'http://test.woodwind.org/clarinet/BBoard/read.html',
+		`${url.origin}/read`
+	);
+
+	const dom = new JSDOM(enrichedHtml);
+	const anchors = dom.window.document.querySelectorAll('a');
+
+	const results = [];
+
+	for (const anchor of anchors) {
+		const isSearchResult = anchor?.textContent?.startsWith('http');
+		if (!isSearchResult) {
+			continue;
+		}
+
+		const link = anchor.href.replace();
+
+		const authorNode = anchor.nextSibling?.nextSibling;
+		const author = authorNode?.textContent ?? '';
+
+		const dateNode = authorNode?.nextSibling?.nextSibling;
+		const date = DateTime.fromSQL(dateNode?.textContent?.trim() ?? '', {
+			zone: BBOARD_TIME_ZONE
+		}).toJSDate();
+
+		const subjectNode = dateNode?.nextSibling?.nextSibling;
+		const subject = subjectNode?.textContent ?? '';
+
+		const previewNode = subjectNode?.nextSibling?.nextSibling;
+		const preview = previewNode?.textContent ?? '';
+
+		results.push({
+			link,
+			author,
+			date,
+			subject,
+			preview
+		});
+	}
+
+	return results;
 }

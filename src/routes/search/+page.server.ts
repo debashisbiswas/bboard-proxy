@@ -1,0 +1,48 @@
+import { parseSearchPage } from '$lib/bboard-parser';
+import type { PageServerLoad } from './$types';
+import { cachedFetchPageContent } from '$lib/cached-fetch';
+import { kv } from '$lib/server/kv';
+import { redirect } from '@sveltejs/kit';
+
+export const load: PageServerLoad = async ({ url, setHeaders }) => {
+	async function getHtml(scrapeUrl: string) {
+		let cacheValue = null;
+		try {
+			cacheValue = (await kv.get(scrapeUrl)) as string | null;
+		} catch (e) {
+			console.error(e);
+		}
+
+		let html;
+		if (cacheValue) {
+			html = cacheValue;
+			const ttl = await kv.ttl(scrapeUrl);
+			setHeaders({ 'cache-control': `max-age=${ttl}` });
+		} else {
+			html = await cachedFetchPageContent(scrapeUrl);
+
+			const expiration = 120;
+			await kv.set(scrapeUrl, html, { ex: expiration });
+			setHeaders({ 'cache-control': `max-age=${expiration}` });
+		}
+
+		return html;
+	}
+
+	const query = url.searchParams.get('query');
+
+	if (!query) {
+		redirect(302, '/');
+	}
+
+	const scrapeUrl =
+		'http://test.woodwind.org/Search/index.html?clarinetBBoard_index=clarinetBBoard_index&sort=swishrank+desc&words=' +
+		query;
+	console.log(scrapeUrl);
+
+	const html = await getHtml(scrapeUrl);
+	console.log(url);
+
+	const searchInfo = parseSearchPage(html, url);
+	return { searchInfo };
+};
