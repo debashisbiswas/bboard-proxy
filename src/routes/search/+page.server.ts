@@ -35,6 +35,11 @@ export const load: PageServerLoad = async ({ url, setHeaders }) => {
 		redirect(302, '/');
 	}
 
+	// TODO: If you're going to add pagination, don't parse the pagination
+	// links from the original page - do the math yourself. The query
+	// parameters accept a begin/end and max, for example:
+	// http://test.woodwind.org/Search/index.html?words=legere&begin=21&max=20&sort=swishrank+desc&clarinetBBoard_index=clarinetBBoard_index
+
 	const scrapeUrl =
 		'http://test.woodwind.org/Search/index.html?clarinetBBoard_index=clarinetBBoard_index&sort=swishrank+desc&words=' +
 		query;
