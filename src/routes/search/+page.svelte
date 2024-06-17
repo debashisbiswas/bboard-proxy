@@ -26,6 +26,7 @@
 					name="query"
 					value={$page.url.searchParams.get('query')}
 					type="text"
+					required
 				/>
 				<button class="ml-4 rounded-lg bg-teal-400/10 px-4 py-2 font-bold text-teal-400"
 					>Search</button
