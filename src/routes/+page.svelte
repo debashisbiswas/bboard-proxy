@@ -1,6 +1,8 @@
 <script lang="ts">
 	import ArrowIcon from '$lib/components/ArrowIcon.svelte';
+	import Spinner from '$lib/components/Spinner.svelte';
 	import TextLink from '$lib/components/TextLink.svelte';
+	import Error from '$lib/components/Error.svelte';
 	import PageHeader from './PageHeader.svelte';
 	import Post from './Post.svelte';
 
@@ -49,26 +51,32 @@
 	</form>
 </div>
 
-{#if data.posts.length > 0}
-	<div class="mb-4 space-y-2">
-		{#each data.posts as post}
-			<Post {post} />
-		{/each}
+{#await data.homepageData}
+	<div class="flex items-center justify-center p-24">
+		<Spinner />
 	</div>
-{/if}
+{:then homepageData}
+	{#if homepageData.posts.length > 0}
+		<div class="mb-4 space-y-2">
+			{#each homepageData.posts as post}
+				<Post {post} />
+			{/each}
+		</div>
 
-{#if data.posts.length > 0}
-	<div class="flex">
-		{#if data.previousT != null}
-			<TextLink href={buildNavigationHref(data.previousT, data.previousA)}
-				>&lt; Newer posts</TextLink
-			>
-		{/if}
+		<div class="flex">
+			{#if homepageData.previousT != null}
+				<TextLink href={buildNavigationHref(homepageData.previousT, homepageData.previousA)}
+					>&lt; Newer posts</TextLink
+				>
+			{/if}
 
-		{#if data.nextT != null}
-			<TextLink href={buildNavigationHref(data.nextT, data.nextA)} class="ml-auto"
-				>Older posts &gt;</TextLink
-			>
-		{/if}
-	</div>
-{/if}
+			{#if homepageData.nextT != null}
+				<TextLink href={buildNavigationHref(homepageData.nextT, homepageData.nextA)} class="ml-auto"
+					>Older posts &gt;</TextLink
+				>
+			{/if}
+		</div>
+	{:else}
+		<Error message="Could not get content from the original BBoard. Is the site down?" />
+	{/if}
+{/await}

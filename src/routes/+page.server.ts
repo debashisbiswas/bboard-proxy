@@ -53,15 +53,15 @@ export const load: PageServerLoad = async ({ url, setHeaders }) => {
 	}
 
 	const scrapeUrl = 'http://test.woodwind.org/clarinet/BBoard/list.html?' + searchParams.toString();
-	const html = await getHtml(scrapeUrl);
-	const homepageData = parseHomepage(html);
 
-	if (homepageData.posts.length === 0) {
-		error(503, 'Could not get content from the original BBoard. Is the site down?');
+	async function getData() {
+		const html = await getHtml(scrapeUrl);
+		const homepageData = parseHomepage(html);
+		return homepageData;
 	}
 
 	return {
-		...homepageData,
+		homepageData: getData(),
 		scrapeUrl
 	};
 };
