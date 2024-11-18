@@ -1,8 +1,9 @@
 # Clarinet BBoard Reader
 
-A webpage for viewing data from [The Clarinet
+A webpage for viewing posts from [The Clarinet
 BBoard](https://test.woodwind.org/clarinet/BBoard/). The primary goal of this
-project is offer a more comfortable reading experience on mobile devices.
+project is to offer a more comfortable reading experience on mobile devices,
+while generally improving design and UX on the site.
 
 ## Developing
 
