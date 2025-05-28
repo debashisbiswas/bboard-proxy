@@ -1,4 +1,4 @@
-<p align="center"><img src="./static/favicon.png"></p>
+<p align="center"><img src="./static/og.png"></p>
 
 # Clarinet BBoard Reader
 
