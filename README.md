@@ -1,3 +1,5 @@
+<p align="center"><img src="./static/favicon.png"></p>
+
 # Clarinet BBoard Reader
 
 A webpage for reading posts from [The Clarinet
