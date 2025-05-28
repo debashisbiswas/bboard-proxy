@@ -1,7 +1,7 @@
 # Clarinet BBoard Reader
 
 A webpage for reading posts from [The Clarinet
-BBoard](http://test.woodwind.org/clarinet/BBoard/), offering a more comfortable
+BBoard](http://test.woodwind.org/clarinet/BBoard/list.html?f=1), offering a more comfortable
 reading experience on mobile devices while generally improving design and UX.
 
 ## Features
