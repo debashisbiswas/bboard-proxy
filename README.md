@@ -1,5 +1,5 @@
 <h1 align="center">
-[Clarinet BBoard Reader](https://clarinet-bboard.vercel.app/)
+<a href="https://clarinet-bboard.vercel.app/">Clarinet BBoard Reader</a>
 </h1>
 
 <h3 align="center">
@@ -10,6 +10,8 @@ and UX.
 ---
 
 <p align="center"><img src="hero.png"></p>
+
+<a href="https://clarinet-bboard.vercel.app/">Check it out here.</a>
 
 A webpage for viewing posts from [the original Clarinet
 BBoard](http://test.woodwind.org/clarinet/BBoard/list.html?f=1), offering a more
