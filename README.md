@@ -19,52 +19,39 @@ comfortable reading experience on mobile devices and improving design and UX.
 
 ## Motivation
 
-The Clarinet BBoard is a forum for clarinetists to discuss niche topics and has
-been around [for over 25
+The Clarinet BBoard is a forum for clarinetists to discuss anything related to
+the clarinet and has been around [for over 25
 years](http://test.woodwind.org/clarinet/BBoard/list.html?f=1&t=917070343&a=2).
-
-I've used the site extensively while studying clarinet repair. Many posts on the
-forum are gold mines with information you can't find anywhere else on the
-internet. For example,
-
-- This post discussing the best way to secure loose threaded posts to the body
-of a clarinet
-([original](http://test.woodwind.org/clarinet/BBoard/read.html?f=1&i=459831&t=459758)),
-([new](https://clarinet-bboard.vercel.app/read?f=1&i=459831&t=459758))
-
-- This post discussing the best material to use for lever pins
-([original](http://test.woodwind.org/clarinet/BBoard/read.html?f=1&i=237119&t=237119)),
-([new](https://clarinet-bboard.vercel.app/read?f=1&i=237119&t=237119))
+I use the site extensively while studying clarinet repair. Many posts on the
+forum are gold mines with information that can't be found anywhere else on the
+internet, allow me to teach myself repair topics that I wouldn't be able to
+learn anywhere else.
 
 Unfortunately, the original site is not well-suited for this sort of research.
-The website's design makes it difficult to read on all devices, and especially
-mobile devices. Every page on the website has the same title ("The Clarinet
-BBoard"). If you bookmark or link multiple forum posts somewhere, they will all
-have the same title unless you update each one manually.
+The website's design makes it difficult to read, especially on mobile devices.
+Every page on the website has the same title ("The Clarinet BBoard"), so if you
+bookmark a forum post, it'll have a generic title unless you update it by hand.
 
-This project aims to solve these problems while improving other areas of the
-experience where possible.
+This project solves these problems while improving other areas of the experience
+where possible.
 
-## Enhancements
+## Features and enhancements
 
 - **Responsive design and improved readability**: Comfortable reading on all
 screen sizes
-- **Page titles**: Page titles match the title of the post you're viewing;
-bookmarks and links have the title of the post
-- **Cached content**: Improved performance and reduced traffic to the original
-site by caching page content
-- **Localized and humanized times**: Parses post times from the original forum's
-timezone to display them in user's local time, relative to the current time
-(today at 11am, yesterday at 6pm...)
+- **Clear page titles**: Page titles match the title of the post you're viewing,
+giving bookmarks and links clear titles
+- **Speed**: Improved performance by preloading data and caching page content
+- **Localized times**: Converts post times from the original forum's timezone to
+display them in user's local time
 - **Extracted post information**: Extracts the author, date, post attachments,
 and edit time on each post from the original forum, displaying them with a
 custom UI
-- **HTTPS**: The original site uses HTTP, causing browser warnings and causing
-the page to be blocked in some environments; the new version uses HTTPS
-- **Updated links**: Any posts that link to another post on to the original
-site are updated to point to the new one
+- **HTTPS**: This project uses HTTPS; the original used HTTP
+- **Updated links**: Updates links to other posts on the site to point to the
+  new site
 - **Social media previews**: When posting a link to a post, the social media
-preview shows the post title and content using the OpenGraph protocol
+card previews the post title and content using the OpenGraph protocol
 - **Search**: Search for posts without visiting the original site
 
 ## Implementation
@@ -76,21 +63,25 @@ and use the data to render the page. The intermediate translation step gives me
 flexibility; rather than simply changing the stylesheet, I can move elements
 around and derive data that wasn't available on the original page.
 
+Each request to the application sends a single request to the original site, or
+zero requests if the page data is warm in the short-term Redis cache. In local
+development, request reponses are cached on-disk long-term to avoid sending many
+requests to the original site during hot reloads. This also speeds up local
+development.
+
 ## Developing
 
-Once you've created a project and installed dependencies with `npm install` (or
-`pnpm install` or `yarn`), start a development server:
+Copy `.env.example` into `.env`. The project is deployed on Vercel, and uses
+Vercel KV (Upstash Redis) to cache requests. Fill in your credentials.
+
+Install the dependencies:
+
+```bash
+npm install
+```
+
+Run the dev server:
 
 ```bash
 npm run dev
 ```
-
-## Building
-
-To create a production version:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
