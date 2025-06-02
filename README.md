@@ -61,7 +61,7 @@ and edit time on each post from the original forum, displaying them with a
 custom UI
 - **HTTPS**: The original site uses HTTP, causing browser warnings and causing
 the page to be blocked in some environments; the new version uses HTTPS
-- **Updated links:**: Any forums which link to another post on to the original
+- **Updated links**: Any forums which link to another post on to the original
 site are updated to point to the new one
 - **Social media previews**: When posting a link to a post, the social media
 preview shows the post title and content using the OpenGraph protocol
