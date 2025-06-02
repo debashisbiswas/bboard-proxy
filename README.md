@@ -1,10 +1,19 @@
-<p align="center"><img src="./static/og.png"></p>
+<h1 align="center">
+[Clarinet BBoard Reader](https://clarinet-bboard.vercel.app/)
+</h1>
 
-# Clarinet BBoard Reader
+<h3 align="center">
+A mobile-focused reader for the Clarinet BBoard focused on readability, design,
+and UX.
+</h3>
 
-A webpage for reading posts from [The Clarinet
-BBoard](http://test.woodwind.org/clarinet/BBoard/list.html?f=1), offering a more comfortable
-reading experience on mobile devices while generally improving design and UX.
+---
+
+<p align="center"><img src="hero.png"></p>
+
+A webpage for viewing posts from [the original Clarinet
+BBoard](http://test.woodwind.org/clarinet/BBoard/list.html?f=1), offering a more
+comfortable reading experience on mobile devices and improving design and UX.
 
 ## Features
 
@@ -26,13 +35,11 @@ site by caching page content
 
 ## Developing
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+Once you've created a project and installed dependencies with `npm install` (or
+`pnpm install` or `yarn`), start a development server:
 
 ```bash
 npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
 ```
 
 ## Building
