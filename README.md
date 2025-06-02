@@ -85,3 +85,7 @@ Run the dev server:
 ```bash
 npm run dev
 ```
+
+## Contributing
+
+If you'd like to make a change, create an issue or pull request!
