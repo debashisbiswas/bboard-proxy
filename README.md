@@ -24,7 +24,7 @@ the clarinet and has been around [for over 25
 years](http://test.woodwind.org/clarinet/BBoard/list.html?f=1&t=917070343&a=2).
 I use the site extensively while studying clarinet repair. Many posts on the
 forum are gold mines with information that can't be found anywhere else on the
-internet, allow me to teach myself repair topics that I wouldn't be able to
+internet, allowing me to teach myself repair topics that I wouldn't be able to
 learn anywhere else.
 
 Unfortunately, the original site is not well-suited for this sort of research.
@@ -65,7 +65,7 @@ around and derive data that wasn't available on the original page.
 
 Each request to the application sends a single request to the original site, or
 zero requests if the page data is warm in the short-term Redis cache. In local
-development, request reponses are cached on-disk long-term to avoid sending many
+development, request reponses are cached on disk long-term to avoid sending many
 requests to the original site during hot reloads. This also speeds up local
 development.
 
