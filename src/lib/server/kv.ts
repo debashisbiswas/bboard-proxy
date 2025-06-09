@@ -1,7 +1,14 @@
-import { createClient } from '@vercel/kv';
-import { KV_REST_API_TOKEN, KV_REST_API_URL } from '$env/static/private';
+import { createClient, VercelKV } from '@vercel/kv';
+import { env } from '$env/dynamic/private';
 
-export const kv = createClient({
-	url: KV_REST_API_URL,
-	token: KV_REST_API_TOKEN
-});
+let kv: VercelKV | undefined = undefined;
+
+if (env.KV_REST_API_URL && env.KV_REST_API_TOKEN) {
+	kv = createClient({
+		url: env.KV_REST_API_URL,
+		token: env.KV_REST_API_TOKEN
+	});
+	console.log('Created KV client.');
+}
+
+export { kv };

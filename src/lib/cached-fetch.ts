@@ -26,7 +26,7 @@ export async function cachedFetchPageContent(url: string): Promise<string> {
 
 			if (await isCacheValid(cacheFilePath)) {
 				const cachedText = await fsPromises.readFile(cacheFilePath, 'utf8');
-				console.log('Returned from cache');
+				console.log(`Returned from cache: ${url}`);
 				return cachedText;
 			}
 		} catch (error) {

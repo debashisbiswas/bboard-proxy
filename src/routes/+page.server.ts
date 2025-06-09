@@ -1,28 +1,30 @@
 import { parseHomepage } from '$lib/bboard-parser';
 import { cachedFetchPageContent } from '$lib/cached-fetch';
-import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { kv } from '$lib/server/kv';
 
 export const load: PageServerLoad = async ({ url, setHeaders }) => {
 	async function getHtml(url: string) {
-		let cacheValue = null;
+		let cacheValue: string | undefined;
 		try {
-			cacheValue = (await kv.get(url)) as string | null;
+			cacheValue = (await kv?.get<string>(url)) ?? undefined;
 		} catch (e) {
 			console.error(e);
 		}
 
-		let html;
+		let html: string;
 		if (cacheValue) {
 			html = cacheValue;
-			const ttl = await kv.ttl(url);
-			setHeaders({ 'cache-control': `max-age=${ttl}` });
+			const ttl = await kv?.ttl(url);
+
+			if (ttl != null) {
+				setHeaders({ 'cache-control': `max-age=${ttl}` });
+			}
 		} else {
 			html = await cachedFetchPageContent(url);
 
 			const expiration = 120;
-			await kv.set(url, html, { ex: expiration });
+			await kv?.set(url, html, { ex: expiration });
 			setHeaders({ 'cache-control': `max-age=${expiration}` });
 		}
 

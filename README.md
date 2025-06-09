@@ -71,9 +71,6 @@ development.
 
 ## Developing
 
-Copy `.env.example` into `.env`. The project is deployed on Vercel, and uses
-Vercel KV (Upstash Redis) to cache requests. Fill in your credentials.
-
 Install the dependencies:
 
 ```bash
@@ -85,6 +82,12 @@ Run the dev server:
 ```bash
 npm run dev
 ```
+
+In production, the application uses Vercel KV (Redis) to cache fetches to the
+original webpage to improve performance. If you want to test this functionality
+in dev, copy `.env.example` into `.env` and fill in the relevant credentials for
+Vercel KV. Remember to set these environment variables if you are deploying the
+application as well.
 
 ## Contributing
 

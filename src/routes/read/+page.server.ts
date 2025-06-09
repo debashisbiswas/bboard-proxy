@@ -6,9 +6,9 @@ import { kv } from '$lib/server/kv';
 
 export const load: PageServerLoad = async ({ url, setHeaders }) => {
 	async function getHtml(scrapeUrl: string) {
-		let cacheValue = null;
+		let cacheValue: string | undefined;
 		try {
-			cacheValue = (await kv.get(scrapeUrl)) as string | null;
+			cacheValue = (await kv?.get(scrapeUrl)) ?? undefined;
 		} catch (e) {
 			console.error(e);
 		}
@@ -16,13 +16,16 @@ export const load: PageServerLoad = async ({ url, setHeaders }) => {
 		let html;
 		if (cacheValue) {
 			html = cacheValue;
-			const ttl = await kv.ttl(scrapeUrl);
-			setHeaders({ 'cache-control': `max-age=${ttl}` });
+			const ttl = await kv?.ttl(scrapeUrl);
+
+			if (ttl != null) {
+				setHeaders({ 'cache-control': `max-age=${ttl}` });
+			}
 		} else {
 			html = await cachedFetchPageContent(scrapeUrl);
 
 			const expiration = 120;
-			await kv.set(scrapeUrl, html, { ex: expiration });
+			await kv?.set(scrapeUrl, html, { ex: expiration });
 			setHeaders({ 'cache-control': `max-age=${expiration}` });
 		}
 
