@@ -83,6 +83,8 @@ Run the dev server:
 npm run dev
 ```
 
+The original site is slow, and the first request may take some time!
+
 In production, the application uses Vercel KV (Redis) to cache fetches to the
 original webpage to improve performance. If you want to test this functionality
 in dev, copy `.env.example` into `.env` and fill in the relevant credentials for
